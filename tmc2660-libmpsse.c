@@ -5,7 +5,9 @@
 #include <endian.h>
 #include <unistd.h>
 #include "spi.h"
+#ifdef HAS_LIBMPSSE
 #include <mpsse.h>
+#endif
 
 static spi_t *dev = NULL;
 
