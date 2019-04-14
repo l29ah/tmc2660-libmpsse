@@ -47,19 +47,17 @@ void dev_xfer(spi_t *dev, uint8_t *data, unsigned len)
 	case SPI_SPIDEV:
 		;
 		int fd = dev->dev;
-		struct spi_ioc_transfer	xfer[2];
+		struct spi_ioc_transfer	xfer[1];
 		unsigned char		*bp;
 		int			status;
 
 		memset(xfer, 0, sizeof xfer);
 
 		xfer[0].tx_buf = (unsigned long)data;
+		xfer[0].rx_buf = (unsigned long)data;
 		xfer[0].len = len;
 
-		xfer[1].rx_buf = (unsigned long)data;
-		xfer[1].len = len;
-
-		status = ioctl(fd, SPI_IOC_MESSAGE(2), xfer);
+		status = ioctl(fd, SPI_IOC_MESSAGE(1), xfer);
 		if (status < 0) {
 			perror("SPI_IOC_MESSAGE");
 			return;
