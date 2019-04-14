@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	(void)argc; (void)argv;
 	int retval = EXIT_FAILURE;
 
-	if ((dev = dev_open(NULL))) {
+	if ((dev = dev_open(argv[1]))) {
 		uint8_t chopconf[] = { 0xf9, 0x01, 0xb4, };
 		xfer(chopconf);
 		uint8_t sgcsconf[] = { 0xfd, 1, 0x10, };
