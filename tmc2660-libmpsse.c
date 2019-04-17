@@ -33,6 +33,12 @@ static uint8_t *xfer(uint8_t data[3])
 	return rv;
 }
 
+void disable(void)
+{
+	uint8_t chopconf[] = { 0xf8, 0x00, 0x00, };
+	xfer(chopconf);
+}
+
 int main(int argc, char *argv[])
 {
 	(void)argc; (void)argv;
@@ -63,6 +69,10 @@ int main(int argc, char *argv[])
 			}
 		}
 #endif
+		sleep(10);
+		puts("Disabling MOSFETs...");
+		disable();
+		puts("MOSFETs disabled");
 		retval = EXIT_SUCCESS;
 	}
 
