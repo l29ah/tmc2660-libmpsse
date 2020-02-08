@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -47,11 +48,19 @@ int main(int argc, char *argv[])
 	if ((dev = dev_open(argv[1]))) {
 		uint8_t chopconf[] = { 0xf9, 0x01, 0xb4, };
 		xfer(chopconf);
-		uint8_t sgcsconf[] = { 0xfd, 1, 0x10, };
+		unsigned current = 0;
+		if (argc > 1 && argv[2]) {
+			sscanf(argv[2], "%u", &current);
+			assert(current < 32);
+		}
+		uint8_t sgcsconf[] = { 0xfd, 1, current, };
 		xfer(sgcsconf);
 		uint8_t drvconf[] = { 0xfe, 0x00, 0x60, };
 		xfer(drvconf);
-		uint8_t drvctrl[] = { 0xf0, 0x03, 0x04, };
+		const uint8_t INTPOL = 2;
+		const uint8_t DEDGE = 1;
+		uint8_t MRES = 0x4;	// microstepping levels
+		uint8_t drvctrl[] = { 0xf0, INTPOL, MRES, };
 		xfer(drvctrl);
 		uint8_t smarten[] = { 0xfa, 0x82, 0x02, };
 		xfer(smarten);
